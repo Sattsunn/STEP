@@ -3,8 +3,6 @@ import os
 def homework1_anagram(word):
 
     anagram=[]
-
-    # ランダムな文字列をソートする
     sorted_word = sorted(word)
 
     #辞書ファイルを読み込む 

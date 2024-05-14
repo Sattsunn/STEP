@@ -1,6 +1,5 @@
 import os
 from itertools import combinations, chain
-import score_checker
 
 
 def count_word(count_word):
@@ -16,16 +15,10 @@ def get_all_combinations(word):
    all_combinations = []
    for r in range(1, len(word) + 1):
        for combo in combinations(word, r):
-            # print('コンボ')
-            # print(combo)
             combo_dict = count_word(''.join(combo))
-            # for char in combo:
-            #    combo_dict[char] = word[char]
             all_combinations.append([''.join(combo),combo_dict])
     
    all_combinations = sorted(all_combinations)
-#    print('全ての組み合わせ')
-#    print(all_combinations)
    return all_combinations
 
         
@@ -45,16 +38,11 @@ def check_score(count):
          
 
 def binary_search(word, dictionary):
-    # print('二分探索')
-    # print(word)
     left = 0
     right = len(dictionary) - 1
     while left <= right:
         mid = (left + right) // 2
-        # print(''.join(dictionary[mid][0]))
         if ''.join(dictionary[mid][0]) == word:
-            # print('探索結果')
-            # print(dictionary[mid])
             return dictionary[mid]
             
         elif str(''.join(dictionary[mid][0])) < str(word):
@@ -70,7 +58,6 @@ def choice_anagram(anagrams):
         if check_score(anagram[2]) > max_score:
             max_score = check_score(anagram[2])
             max_score_word = anagram[1]
-    # print(max_score_word)
     return max_score_word
 
 
@@ -88,7 +75,6 @@ def homework2_anagram(file):
             new_search_words.append([''.join(sorted(search_word)),search_word_count])
         new_search_words = sorted(new_search_words)
     
-    # print(new_search_words)
     
 
     # 辞書ファイルを読み込む 
@@ -117,15 +103,18 @@ def homework2_anagram(file):
                 f.write(''.join(new_word[0]) + '\t' + new_word[1] + '\t' + str(new_word[2])  + '\n')
 
     def search_anagram(search_words, dictionary):
+        num=0
         answer=[]
         for search_word in search_words:
+            num+=1
+            print(num)
             conbination=get_all_combinations(search_word[0])
             test_anagrams = []
             for con in conbination:
                 if binary_search(con[0],dictionary) != None:
                     test_anagrams.append(binary_search(con[0],dictionary))
             answer.append(choice_anagram(test_anagrams))
-            # print(answer)
+            print(answer)
         return answer
                 
     search_anagram(new_search_words, new_sorted_dictionary)
@@ -144,6 +133,6 @@ def homework2_anagram(file):
 
 # テストケース
 if __name__ == "__main__":
-    # print(homework2_anagram('small'))
-    # print(homework2_anagram('medium'))
+    print(homework2_anagram('small'))
+    print(homework2_anagram('medium'))
     print(homework2_anagram('large'))
