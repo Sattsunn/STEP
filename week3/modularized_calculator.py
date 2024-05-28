@@ -34,6 +34,16 @@ def read_divide(line, index):
     token = {'type': 'DIVIDE'}
     return token, index + 1
 
+# 括弧のトークンを追加
+
+def read_first_bracket(line, index):
+    token = {'type': 'LPAREN'}
+    return token, index + 1
+
+def read_end_bracket(line, index):
+    token = {'type': 'RPAREN'}
+    return token, index + 1
+
 
 def tokenize(line):
     tokens = []
@@ -50,6 +60,11 @@ def tokenize(line):
             (token, index) = read_multiply(line, index)
         elif line[index] == '/':
             (token, index) = read_divide(line, index)
+            # 括弧の追加
+        elif line[index] == '(':
+            (token, index) = read_first_bracket(line, index)
+        elif line[index] == ')':
+            (token, index) = read_end_bracket(line, index)
         else:
             print('Invalid character found: ' + line[index])
             exit(1)
@@ -57,9 +72,47 @@ def tokenize(line):
     return tokens
 
 
+
 def evaluate(tokens):
+    # 括弧の処理
+    index = 0
+    while index < len(tokens):
+        if tokens[index]['type'] == 'LPAREN':
+            # Find the matching right parenthesis
+            balance = 0
+            for look_ahead_index in range(index, len(tokens)):
+                if tokens[look_ahead_index]['type'] == 'LPAREN':
+                    balance += 1
+                elif tokens[look_ahead_index]['type'] == 'RPAREN':
+                    balance -= 1
+                    if balance == 0:
+                        break
+            else:
+                print('No matching right parenthesis')
+                exit(1)
+            # Recursively evaluate the expression inside the parenthesis
+            inner_answer = evaluate(tokens[index + 1:look_ahead_index])
+            tokens = tokens[:index] + [{'type': 'NUMBER', 'number': inner_answer}] + tokens[look_ahead_index + 1:]
+        index += 1
+
+    # 掛け算と割り算の処理を先にする
+    index = 0
+    while index < len(tokens):
+        
+
+        if tokens[index]['type'] in ['MULTIPLY', 'DIVIDE']:
+            if tokens[index]['type'] == 'MULTIPLY':
+                tokens[index - 1]['number'] *= tokens[index + 1]['number']
+            else:  
+                tokens[index - 1]['number'] /= tokens[index + 1]['number']
+            # 今のトークンと次のトークンを削除
+            del tokens[index:index + 2]
+        else:
+            index += 1
+
+    # 足し算と引き算の処理
     answer = 0
-    tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
+    tokens.insert(0, {'type': 'PLUS'})  # Insert a dummy '+' token
     index = 1
     while index < len(tokens):
         if tokens[index]['type'] == 'NUMBER':
@@ -67,11 +120,6 @@ def evaluate(tokens):
                 answer += tokens[index]['number']
             elif tokens[index - 1]['type'] == 'MINUS':
                 answer -= tokens[index]['number']
-            # 掛け算と割り算の処理を追加
-            elif tokens[index - 1]['type'] == 'MULTIPLY':
-                answer *= tokens[index]['number']
-            elif tokens[index - 1]['type'] == 'DIVIDE':
-                answer /= tokens[index]['number']
             else:
                 print('Invalid syntax')
                 exit(1)
@@ -97,6 +145,9 @@ def run_test():
     test("5*6")
     test("6/2")
     test("3.0+4*2-1/5")
+    test("9-3/2+6*5")
+    test("(3.0+4*(2-1))/5")
+    test("(5+3)*(2-1)/5")
     print("==== Test finished! ====\n")
 
 run_test()
