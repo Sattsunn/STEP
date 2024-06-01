@@ -72,6 +72,7 @@ def tokenize(line):
     return tokens
 
 
+# 中身もモジュール化
 
 def evaluate(tokens):
     # 括弧の処理
