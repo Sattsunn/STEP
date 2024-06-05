@@ -189,6 +189,7 @@ if __name__ == "__main__":
     wikipedia.find_most_linked_pages()
     wikipedia.find_shortest_path("ヨーロッパ", "生物")
     wikipedia.find_shortest_path("渋谷", "パレートの法則")
+    wikipedia.find_shortest_path("渋谷", "小野妹子")
     wikipedia.find_shortest_path("男らしさ", "女装")
     wikipedia.find_shortest_path("シェラトン・タワーズ・シンガポール", "CONCONJUMP")
     wikipedia.find_most_popular_pages()

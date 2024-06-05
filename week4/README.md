@@ -44,6 +44,8 @@ The shortest path is:
 The shortest path is:
 ['渋谷', 'マクドナルド', 'Twitter', 'パレートの法則']
 The shortest path is:
+['渋谷', 'ギャルサー_(テレビドラマ)', '小野妹子']
+The shortest path is:
 ['男らしさ', '性同一性障害', '女装']
 The shortest path is:
 ['シェラトン・タワーズ・シンガポール', 'ホテル', '松任谷由実', 'BLUE_ENCOUNT', 'MidnightPumpkin', 'CONCONJUMP']
