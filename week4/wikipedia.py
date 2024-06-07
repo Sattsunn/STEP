@@ -107,9 +107,15 @@ class Wikipedia:
                     queue.append(child)
         print("There is no path between %s and %s" % (start, goal))
         return "Not found"
+    
+    # 辞書の中身をコメントで残す
+
 
 
         # Calculate the page ranks and print the most popular pages.
+
+        # 辞書より配列を使う
+        # 
 
     def find_most_popular_pages(self, damping_factor=0.85, epsilon=1e-6, max_iterations=100):
         num_nodes = len(self.titles)
@@ -128,18 +134,22 @@ class Wikipedia:
         page_ranks = np.full(num_nodes, 1)
 
         # ページランクの計算（最大100回まで）
+        count = 0
         for _ in range(max_iterations):
+            count += 1
+            print(count)
             new_page_ranks = np.zeros(num_nodes)
 
             # 各ノードのページランクを更新
             for node in range(1, num_nodes+1):
                 if node in self.links and node in self.titles:
+                
                     incoming_pr = 0
 
                     # 隣接ノードからの寄与を計算
                     for incoming_node in incoming_links[node]:
                         if incoming_node in self.titles:
-                            incoming_pr += page_ranks[incoming_node-1] / len(self.links[incoming_node])
+                            incoming_pr += damping_factor * page_ranks[incoming_node-1] / len(self.links[incoming_node])
 
                     # 残りの確率を均等に分配
                     incoming_pr = (1 - damping_factor) / num_nodes + damping_factor * incoming_pr
